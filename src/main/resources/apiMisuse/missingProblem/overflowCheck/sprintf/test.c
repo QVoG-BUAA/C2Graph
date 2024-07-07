@@ -10,7 +10,7 @@ int main() {
     // 将字符串格式化到 buffer 中
 //    if (true)
      if (buffer)
-    // if (userName)
+//     if (userName)
     {
         sprintf(buffer, "Congratulations, %s!", userName);
     }

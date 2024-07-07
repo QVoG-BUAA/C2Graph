@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     }
 
     char *lib = argv[2];
-    // char *lib = argv[2] + 1;
+//     char *lib = argv[2] + 1;
     // once have "definelike", we can not check it.
     void *handle = dlopen(lib, RTLD_LAZY);
     if (!handle) {

@@ -39,7 +39,9 @@ public class ParserUtil {
         String[] splitName = filename.split("\\.");
         String oldExtension = splitName.length > 1 ? "." + splitName[splitName.length - 1] : "";
 
-        if (!oldExtension.equals(".c")) {
+        if (!oldExtension.equals(".c")
+//                && !oldExtension.equals(".cpp")
+        ) {
             return null;
         }
         return filePath;

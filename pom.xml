@@ -98,5 +98,13 @@
             <artifactId>icu4j</artifactId>
             <version>72.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.cdt</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/org.eclipse.cdt.core_8.4.0.202401242025.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

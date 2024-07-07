@@ -3,7 +3,7 @@
 #include <time.h>
 
 void init() {
-    // srand(time(NULL));
+//     srand(time(NULL));
 }
 
 int main() {

@@ -21,7 +21,7 @@ void* thread_function(void* arg) {
         pthread_exit(NULL);  // Exit thread without unlocking the mutex
     }
 
-    pthread_mutex_unlock(&mutex);
+//    pthread_mutex_unlock(&mutex);
     return NULL;
 }
 
