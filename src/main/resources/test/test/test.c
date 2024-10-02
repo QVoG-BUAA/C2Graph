@@ -1,20 +1,6 @@
-#include <stdio.h>
-
-struct Node {
-    struct Node2 {
-        int c;
-    } b;
-} a;
-
-int main(void)
-{
-    struct Node2 d;
-    a.b = d;
-    int i = a.b.c;
-//
-//    int i = 0;
-//    int j = 0;
-//    int e[5][5];
-//    e[i][j] = 1;
-//    int f = e[i][j + 1];
+int main(int argc, char* argv[]) {
+	int *buff = malloc(SIZE * sizeof(int));
+	int status = 0;
+	//... //code that does not free buff
+	return status; //buff is never closed
 }

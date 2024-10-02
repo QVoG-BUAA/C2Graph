@@ -22,6 +22,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeleteExpression;
 import org.eclipse.cdt.core.dom.ast.gnu.IGNUASTCompoundStatementExpression;
 import org.eclipse.cdt.internal.core.dom.parser.c.*;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.*;
+import org.eclipse.osgi.internal.debug.Debug;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -1037,6 +1038,12 @@ public class C2Graph {
         handleTask(iastDefaultStatement, cur);
 
         IfEnv env = (IfEnv) envStack.peek();
+//        try {
+//            env = (IfEnv) envStack.peek();
+//        } catch (Exception e) {
+//            DebugUtil.printNodeInfo(iastDefaultStatement);
+//            env = (IfEnv) envStack.peek();
+//        }
         nodeArrayList.get(env.getConditionIdx()).addCfgEdge(EMPTY, cur);
     }
 
@@ -1173,7 +1180,7 @@ public class C2Graph {
         cur.setLastValidNode(true);
         cur.setHasMultiLineMacro(true);
 
-        Stack<Env> copy = envStack;
+        Stack<Env> copy = (Stack<Env>) envStack.clone();
         for (IGNUASTCompoundStatementExpression macroStmt : res) {
             int first = nodeArrayList.size();
 

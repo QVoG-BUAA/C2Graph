@@ -14,25 +14,23 @@ you need a config.json in project working dir (root dir) like belows(windows for
 
 - project: the root dir, it may contain multi concrete dirs
 
-- dir: the concrete dir
-  - project + dir = the folder you would like to analyse
+- dir: the concrete dir/file
+  - project + dir = the folder or file you would like to analyse
 
 - includePath: the path of the header file, it may contain multi paths
+  - it does not support relative path
 
-- debug: in this mode, it does not connect to Neo4j. In other words, it does not save data to db, suitable for debugging
-
-- highPrecision: in this mode, it will parse the file with high precision, it will take more time
-  - default is false
+- highPrecision: set to False
 
 ```json
 {
   "host": "192.168.175.128",
   "port": 7687,
   "includePath": [
-        "G:\\Github\\Research-Classroom\\src\\Code2Graph\\C2Graph\\src\\main\\resources\\cxxHeaderLib",
-        "G:\\Github\\Research-Classroom\\src\\Code2Graph\\C2Graph\\src\\main\\resources\\cxxHeaderLib\\ssp"
+        "G:\\C2Graph\\src\\main\\resources\\cxxHeaderLib",
+        "G:\\C2Graph\\src\\main\\resources\\cxxHeaderLib\\ssp"
   ],
-  "project": "G:\\Github\\Research-Classroom\\src\\Code2Graph\\C2Graph\\src\\main\\resources\\apiMisuse\\",
+  "project": "G:\\C2Graph\\src\\main\\resources\\apiMisuse\\",
   "dir": "twiceProblem\\SocketDoubleClose",
   "highPrecision": false
 }

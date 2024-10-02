@@ -1,6 +1,7 @@
 package org.c2graph.util;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
@@ -9,14 +10,32 @@ public class ParserUtil {
         parseFilesInDirectory("G:\\Github\\Research-Classroom\\src\\Code2Graph\\C2Graph\\src\\main\\resources\\Memory\\leak");
     }
 
+    public static boolean isWindows()
+    {
+        return System.getProperty("os.name").toLowerCase().contains("win");
+    }
+
     public static ArrayList<String> parseFilesInDirectory(String directory) {
+        ArrayList<String> parseFiles = new ArrayList<>();
         File folder = new File(directory);
+        if (folder.isFile()) {
+            String parseFile = checkExtension(folder.getPath());
+            if (parseFile != null) {
+                parseFiles.add(parseFile);
+            }
+        }
+
         if (!folder.isAbsolute()) {
-            directory = Paths.get("config.json").toAbsolutePath().getParent().toString() + "\\" + directory;
+            boolean isWindows = isWindows();
+            Path path = Paths.get("config.json");
+            if (isWindows) {
+                directory = path.toAbsolutePath().getParent().toString() + "\\" + directory;
+            } else {
+                directory = path.toAbsolutePath().getParent().toString() + "/" + directory;
+            }
             folder = new File(directory);
         }
         File[] files = folder.listFiles();
-        ArrayList<String> parseFiles = new ArrayList<>();
 
         if (files != null) {
             for (File file : files) {
