@@ -30,7 +30,7 @@
         "G:\\C2Graph\\src\\main\\resources\\cxxHeaderLib",
         "G:\\C2Graph\\src\\main\\resources\\cxxHeaderLib\\ssp"
   ],
-  "project": "G:\\C2Graph\\src\\main\\resources\\apiMisuse\\",
+  "project": "G:\\C2Graph\\src\\main\\resources\\vulnerability\\",
   "dir": "twiceProblem\\SocketDoubleClose",
   "highPrecision": false
 }
