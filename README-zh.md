@@ -1,6 +1,6 @@
 # C2Graph
 
-我们使用 Eclipse CDT 来构建 C/C++ 的 CPG
+我们使用 Eclipse CDT 来构建 C 的 CPG
 
 ### 环境要求
 

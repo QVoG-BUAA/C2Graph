@@ -1,6 +1,6 @@
 # C2Graph
 
-we use Eclipse CDT to build C/C++ code property graph
+we use Eclipse CDT to build C code property graph
 
 ### Requirements
 
