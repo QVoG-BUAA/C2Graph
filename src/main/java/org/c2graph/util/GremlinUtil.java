@@ -614,7 +614,8 @@ public class GremlinUtil {
         if (nodes != null) {
             for (CASTNode node : nodes) {
                 if (node.getStmt().isExtern) {
-                    if (node.getStmt().isDefinition) {
+                    if (node.getStmt().isDefinition)
+                    {
                         nodeCount++;
                         if (drop == null) {
                             drop = Main.g.V(getIdFromVertexCache(node))

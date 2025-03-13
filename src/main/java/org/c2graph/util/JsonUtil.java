@@ -22,51 +22,56 @@ public class JsonUtil {
         if (expression == null) {
             return new JSONObject();
         }
-        if (expression instanceof IASTLiteralExpression) {
-            return getLiteralExprJson(((IASTLiteralExpression) expression));
+        try {
+            if (expression instanceof IASTLiteralExpression) {
+                return getLiteralExprJson(((IASTLiteralExpression) expression));
+            }
+            if (expression instanceof IASTIdExpression) {
+                return getIdExprJson(((IASTIdExpression) expression));
+            }
+            if (expression instanceof IASTBinaryExpression) {
+                return getBinaryExprJson(((IASTBinaryExpression) expression));
+            }
+            if (expression instanceof IASTFunctionCallExpression) {
+                return getFunctionCallExprJson(((IASTFunctionCallExpression) expression));
+            }
+            if (expression instanceof IASTUnaryExpression) {
+                return getUnaryExprJson(((IASTUnaryExpression) expression));
+            }
+            if (expression instanceof IASTTypeIdExpression) {
+                return getTypeIdExprJson(((IASTTypeIdExpression) expression));
+            }
+            if (expression instanceof IASTArraySubscriptExpression) {
+                return getArraySubExprJson(((IASTArraySubscriptExpression) expression));
+            }
+            if (expression instanceof IASTCastExpression castExpression) {
+                return getCastJson(castExpression);
+            }
+            if (expression instanceof IASTFieldReference fieldReference) {
+                return getFieldJson(fieldReference);
+            }
+            if (expression instanceof IGNUASTCompoundStatementExpression compoundStatementExpression) {
+                return getCompoundExprJson(compoundStatementExpression);
+            }
+            if (expression instanceof CPPASTNewExpression newExpression) {
+                return getNewJson(newExpression);
+            }
+            if (expression instanceof CPPASTDeleteExpression deleteExpression) {
+                return getDeleteJson(deleteExpression);
+            }
+            if (expression instanceof IASTExpressionList exprList) {
+                return getExprListJson(exprList);
+            }
+            if (expression instanceof IASTConditionalExpression conditionalExpression) {
+                return getConditionExpr(conditionalExpression);
+            }
+            if (expression instanceof IASTTypeIdInitializerExpression typeIdInitializerExpression) {
+                return getTypeIdInitializerJson(typeIdInitializerExpression);
+            }
+        } catch (Exception e) {
+            return new JSONObject();
         }
-        if (expression instanceof IASTIdExpression) {
-            return getIdExprJson(((IASTIdExpression) expression));
-        }
-        if (expression instanceof IASTBinaryExpression) {
-            return getBinaryExprJson(((IASTBinaryExpression) expression));
-        }
-        if (expression instanceof IASTFunctionCallExpression) {
-            return getFunctionCallExprJson(((IASTFunctionCallExpression) expression));
-        }
-        if (expression instanceof IASTUnaryExpression) {
-            return getUnaryExprJson(((IASTUnaryExpression) expression));
-        }
-        if (expression instanceof IASTTypeIdExpression) {
-            return getTypeIdExprJson(((IASTTypeIdExpression) expression));
-        }
-        if (expression instanceof IASTArraySubscriptExpression) {
-            return getArraySubExprJson(((IASTArraySubscriptExpression) expression));
-        }
-        if (expression instanceof IASTCastExpression castExpression) {
-            return getCastJson(castExpression);
-        }
-        if (expression instanceof IASTFieldReference fieldReference) {
-            return getFieldJson(fieldReference);
-        }
-        if (expression instanceof IGNUASTCompoundStatementExpression compoundStatementExpression) {
-            return getCompoundExprJson(compoundStatementExpression);
-        }
-        if (expression instanceof CPPASTNewExpression newExpression) {
-            return getNewJson(newExpression);
-        }
-        if (expression instanceof CPPASTDeleteExpression deleteExpression) {
-            return getDeleteJson(deleteExpression);
-        }
-        if (expression instanceof IASTExpressionList exprList) {
-            return getExprListJson(exprList);
-        }
-        if (expression instanceof IASTConditionalExpression conditionalExpression) {
-            return getConditionExpr(conditionalExpression);
-        }
-        if (expression instanceof IASTTypeIdInitializerExpression typeIdInitializerExpression) {
-            return getTypeIdInitializerJson(typeIdInitializerExpression);
-        }
+
         if (expression instanceof IASTProblemExpression) {
             return new JSONObject();
         }

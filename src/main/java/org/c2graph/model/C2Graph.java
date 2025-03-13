@@ -266,45 +266,50 @@ public class C2Graph {
                 break;
             }
 
-            if (node instanceof IASTDeclarationStatement) {
-                handleDeclStmt(node);
-            } else if (node instanceof IASTIfStatement) {
-                handleIfStmt(node);
-            } else if (node instanceof IASTFunctionDefinition) {
-                handleFunDefStmt(node);
-            } else if (node instanceof IASTReturnStatement) {
-                handleReturnStmt(node);
-            } else if (node instanceof IASTExpressionStatement) {
-                handleExprStmt(node);
-            } else if (node instanceof IASTWhileStatement) {
-                handleWhileStmt(node);
-            } else if (node instanceof IASTBreakStatement) {
-                handleBreakStmt(node);
-            } else if (node instanceof IASTContinueStatement) {
-                handleContinueStmt(node);
-            } else if (node instanceof IASTForStatement) {
-                handleForStmt(node);
-            } else if (node instanceof IASTDoStatement) {
-                handleDoStmt(node);
-            } else if (node instanceof IASTSwitchStatement) {
-                handleSwitchStmt(node);
-            } else if (node instanceof IASTCaseStatement) {
-                handleCaseStmt(node);
-            } else if (node instanceof IASTDefaultStatement) {
-                handleDefaultStmt(node);
-            } else if (node instanceof IASTNullStatement) {
-                handleNullStmt(node);
-                // nothing needs to do
-            } else if (node instanceof IASTCompoundStatement) {
-                handleCompoundStmt(node);
-            } else if (node instanceof IASTGotoStatement gotoStatement) {
-                handleGotoStmt(gotoStatement);
-            } else if (node instanceof IASTLabelStatement labelStatement) {
-                handleLabelStmt(labelStatement);
-            } else if (node instanceof IASTProblemStatement) {
+            try {
+
+                if (node instanceof IASTDeclarationStatement) {
+                    handleDeclStmt(node);
+                } else if (node instanceof IASTIfStatement) {
+                    handleIfStmt(node);
+                } else if (node instanceof IASTFunctionDefinition) {
+                    handleFunDefStmt(node);
+                } else if (node instanceof IASTReturnStatement) {
+                    handleReturnStmt(node);
+                } else if (node instanceof IASTExpressionStatement) {
+                    handleExprStmt(node);
+                } else if (node instanceof IASTWhileStatement) {
+                    handleWhileStmt(node);
+                } else if (node instanceof IASTBreakStatement) {
+                    handleBreakStmt(node);
+                } else if (node instanceof IASTContinueStatement) {
+                    handleContinueStmt(node);
+                } else if (node instanceof IASTForStatement) {
+                    handleForStmt(node);
+                } else if (node instanceof IASTDoStatement) {
+                    handleDoStmt(node);
+                } else if (node instanceof IASTSwitchStatement) {
+                    handleSwitchStmt(node);
+                } else if (node instanceof IASTCaseStatement) {
+                    handleCaseStmt(node);
+                } else if (node instanceof IASTDefaultStatement) {
+                    handleDefaultStmt(node);
+                } else if (node instanceof IASTNullStatement) {
+                    handleNullStmt(node);
+                    // nothing needs to do
+                } else if (node instanceof IASTCompoundStatement) {
+                    handleCompoundStmt(node);
+                } else if (node instanceof IASTGotoStatement gotoStatement) {
+                    handleGotoStmt(gotoStatement);
+                } else if (node instanceof IASTLabelStatement labelStatement) {
+                    handleLabelStmt(labelStatement);
+                } else if (node instanceof IASTProblemStatement) {
 //                System.out.println("problemStmt: \t" + node.getContainingFilename() + ":" + node.getFileLocation().getStartingLineNumber());
-            } else {
-                System.out.println(AnsiColors.ANSI_RED + node + " :the stmt is todo.");
+                } else {
+                    System.out.println(AnsiColors.ANSI_RED + node + " :the stmt is todo.");
+                }
+            } catch (Exception e) {
+
             }
         }
     }
@@ -406,7 +411,12 @@ public class C2Graph {
      */
     private void handleDeclStmt(IASTNode node) {
         IASTDeclarationStatement decl = (IASTDeclarationStatement) node;
-        DeclarationStatement declarationStatement = new DeclarationStatement(decl);
+        DeclarationStatement declarationStatement;
+        try {
+            declarationStatement = new DeclarationStatement(decl);
+        } catch (Exception e) {
+            return;
+        }
 
         IASTDeclaration declaration = decl.getDeclaration();
         CASTNode cur = build4CastNode(declaration, declarationStatement);
@@ -482,6 +492,9 @@ public class C2Graph {
         if (!envStack.isEmpty()) {
             if (envStack.peek().childMergeUp || envStack.peek().siblingMergeUp) {
                 ifEnv.shouldEmptyMergeUp = true;
+                if (envStack.peek().childMergeUp) {
+                    envStack.peek().childMergeUp = false;
+                }
             }
         }
 
@@ -651,7 +664,7 @@ public class C2Graph {
             nodeArrayList.add(exitNode);
             handleCfgTask(exitNode);
 
-            handleFunctionReturnDfgEdge(functionDefId, nodeArrayList.size() - 1, exitNode);
+//            handleFunctionReturnDfgEdge(functionDefId, nodeArrayList.size() - 1, exitNode);
             // it seems that we do not need to care about if the last stmt is return
 //            CopyOnWriteArrayList<CfgEdge> cfgEdges = exitNode.getCfgEdges();
 //            for (CfgEdge cfgEdge : cfgEdges) {
@@ -741,7 +754,7 @@ public class C2Graph {
         }
     }
 
-    private void handleWhileStmt(IASTNode node) {
+    private void handleWhileStmt(IASTNode node) throws Exception {
         IASTWhileStatement whileStmt = (IASTWhileStatement) node;
         IASTExpression condition = whileStmt.getCondition();
         WhileStatement whileStatement = new WhileStatement(condition);
@@ -752,6 +765,7 @@ public class C2Graph {
         WhileEnv whileEnv = new WhileEnv();
         if (!envStack.isEmpty() && envStack.peek().childMergeUp) {
             whileEnv.shouldFalseMergeUp = true;
+            envStack.peek().childMergeUp = false;
         }
 
         int idx = nodeArrayList.size() - 1;
@@ -872,6 +886,7 @@ public class C2Graph {
         forEnv.conditionIdx = condId;
         if (!envStack.isEmpty() && envStack.peek().childMergeUp) {
             forEnv.shouldFalseMergeUp = true;
+            envStack.peek().childMergeUp = false;
         }
 
         forEnv.setShouldTrueJump2(true);
@@ -938,6 +953,7 @@ public class C2Graph {
         doEnv.isDo = true;
         if (!envStack.isEmpty() && envStack.peek().childMergeUp) {
             doEnv.shouldFalseMergeUp = true;
+            envStack.peek().childMergeUp = false;
         }
         envStack.push(doEnv);
 
@@ -997,6 +1013,9 @@ public class C2Graph {
         if (!envStack.isEmpty()) {
             if (envStack.peek().childMergeUp || envStack.peek().siblingMergeUp) {
                 switchEnv.shouldEmptyMergeUp = true;
+                if (envStack.peek().childMergeUp) {
+                    envStack.peek().childMergeUp = false;
+                }
             }
         }
         envStack.push(switchEnv);
@@ -1773,6 +1792,7 @@ public class C2Graph {
             ifEnv.getFalseList().clear();
         } else if (ifEnv.isFinished) {
             hasV = true;
+            // it has the function of addFalseList
             ifEnv.getIfEmptyList().addAll(ifEnv.mergeUpEmptyList);
             addNormalEmptyCfgEdge(cur, ifEnv.getIfEmptyList());
             for (Integer idx : ifEnv.mergeUpFalseList) {
@@ -1780,7 +1800,7 @@ public class C2Graph {
                 node.addCfgEdge(FALSE, cur);
             }
 
-            // If 的条件判断正式结束
+            // If finish
             envStack.pop();
         }
 
