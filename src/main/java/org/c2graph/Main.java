@@ -118,12 +118,13 @@ public class Main {
 
         ExtendedScannerInfo info = new ExtendedScannerInfo(definedSymbols, includePaths.toArray(new String[0]));
         IParserLogService logger = new DefaultLogService();
-        IncludeFileContentProvider includeFileContentProvider = new org.c2graph.config.IncludeFileContentProvider();
+        IncludeFileContentProvider emptyIncludes = IncludeFileContentProvider.getEmptyFilesProvider();
+//        IncludeFileContentProvider includeFileContentProvider = new org.c2graph.config.IncludeFileContentProvider();
 
         int opts = ILanguage.OPTION_IS_SOURCE_UNIT;
 
         if (filePath.endsWith(".c"))
-            return GCCLanguage.getDefault().getASTTranslationUnit(fileContent, info, includeFileContentProvider, null, opts, logger);
-        return GPPLanguage.getDefault().getASTTranslationUnit(fileContent, info, includeFileContentProvider, null, opts, logger);
+            return GCCLanguage.getDefault().getASTTranslationUnit(fileContent, info, emptyIncludes, null, opts, logger);
+        return GPPLanguage.getDefault().getASTTranslationUnit(fileContent, info, emptyIncludes, null, opts, logger);
     }
 }

@@ -1,16 +1,126 @@
 # C2Graph
 
-we use Eclipse CDT to build C code property graph
+C2Graph is a tool that leverages Eclipse CDT to construct a comprehensive property graph from C/C++ source code. This graph represents the code's structure, control flow, and data dependencies, enabling advanced code analysis.
 
-### Requirements
+## Project Structure
+
+This section outlines the directory structure and the key components of the C2Graph project.
+
+### `lib/`
+
+Contains the Eclipse CDT library JAR file. This dependency is included directly within the project as it is not available on public Maven repositories.
+
+### `src/`
+
+Contains the complete source code for the C2Graph Java project.
+
+#### `src/main/java/`
+
+This directory holds the primary Java source code for the C2Graph application.
+
+*   **`org.c2graph.config`**:
+    Manages configuration settings (e.g., loaded from `config.json`) and initializes the Eclipse CDT parser for C/C++ files.
+
+*   **`org.c2graph.model`**:
+    Defines the core data structures for the C2Graph property graph, including nodes and edges.
+  *   **`bindings/`**:
+      Provides mechanisms for attaching metadata to graph nodes and edges.
+  *   **`concurrent/`**:
+      Handles multi-threaded operations, particularly for concurrent graph data uploads to a database.
+  *   **`edge/`**:
+      Contains definitions for various types of graph edges.
+    *   `CASTEdge`: The base class for all C2Graph edges, representing relationships between elements in the Abstract Syntax Tree (AST).
+  *   **`stmt/`**:
+      Represents different types of C/C++ statements within the graph, designed to abstract and extract information from corresponding AST nodes.
+    *   `Statement`: The abstract base class for all statement representations in the graph.
+  *   `C2Graph`: The primary class responsible for parsing C/C++ files and constructing the C2Graph property graph.
+  *   `CASTNode`: Represents a node in the C2Graph, typically corresponding to an element in the C/C++ Abstract Syntax Tree (AST).
+  *   `JsonNode`, `JsonArrayNode`: Utility classes for constructing JSON objects and arrays, used for graph serialization or database uploads.
+
+*   **`org.c2graph.util`**:
+    Provides a collection of utility methods to assist in C/C++ file parsing, graph construction, and data management.
+  *   **`debug/`**:
+      Aids in debugging by providing functionalities related to C/C++ AST parsing and visualization.
+  *   **`env/`**:
+      Manages environment contexts for Control Flow Graph (CFG) construction.
+    *   `Env`: Abstract base class for CFG environments.
+    *   `IfEnv`: Models the CFG environment for `if` statements, aiding control flow determination.
+    *   `WhileEnv`: Models the CFG environment for loop-like statements (e.g., `while`), assisting control flow determination.
+  *   **`exceptions/`**:
+      Contains custom exception classes specific to C2Graph operations.
+  *   `ConcurrentUtil`: Facilitates concurrent operations, including data verification during multi-threaded graph uploads.
+  *   `ExprUtil`: Assists in processing C/C++ expressions and extracting relevant expression information.
+  *   `FunctionCallUtil`: Provides utilities for extracting detailed information about function calls.
+  *   `GremlinUtil`: Facilitates graph interaction, particularly for uploading graph data to a database using the Gremlin traversal language.
+  *   `JsonUtil`: Provides utility methods for constructing JSON representations of graph elements, especially statements.
+  *   `MacroUtil`: Manages the handling and expansion of C/C++ preprocessor macros.
+  *   `NodeUtil`: Assists in managing graph nodes, including their creation and upload processes.
+  *   `ParserUtil`: Provides helper methods for parsing C/C++ source files using Eclipse CDT.
+  *   `StatementUtil`: Offers utilities for processing and managing statement-related data within the graph.
+
+*   `Main`:
+    The primary entry point for the C2Graph application, orchestrating the parsing of C/C++ files and the subsequent graph construction.
+
+#### `src/main/resources/`
+
+Contains supplementary resources for C2Graph, including official C/C++ header files, test samples, and utility scripts (e.g., for data cleanup)
+
+## Requirements
 
 - JDK 17
 
-- Maven
+- Maven, install all dependencies
 
-### Before move on
+- Gremin-Server
 
-you need a config.json in project working dir (root dir) like belows(windows format):
+#### Gremlin-Server Install
+
+> Neo4j 3.3.9
+ 
+```bash
+wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -
+echo 'deb https://debian.neo4j.com stable legacy' | sudo tee /etc/apt/sources.list.d/neo4j.list
+sudo apt-get update
+apt list -a neo4j
+apt install neo4j=1:3.3.9
+```
+
+> Gemlin-server 3.7.0
+
+```bash
+wget https://dlcdn.apache.org/tinkerpop/3.7.0/apache-tinkerpop-gremlin-server-3.7.0-bin.zip
+unzip apache-tinkerpop-gremlin-server-3.7.0-bin.zip
+cd apache-tinkerpop-gremlin-server-3.7.0-bin
+bin/gremlin-server.sh install org.apache.tinkerpop neo4j-gremlin 3.7.0 #Installing the Neo4j control plugin for Gremlin.
+```
+
+> Gremlin-Server config
+>> gremlin-server-neo4j.yaml
+
+```yaml
+host: 0.0.0.0
+port: 7687
+```
+
+> Gremlin-Server config
+>> neo4j-empty.properties
+
+```yaml
+gremlin.neo4j.directory=/opt/neo4j/data/databases/graph.db #neo4j location, use `neo4j console`
+```
+
+> Start Gremlin-Server
+>> if there is no error shown in console, the service is ready to use.
+
+```bash
+./bin/gremlin-server.sh conf/gremlin-server-neo4j.yaml console
+```
+
+#### Before move on
+
+you need a config.json in project working dir (root dir) like belows(windows format), below is the introduction of parameters:
+
+- host, port: the host and port of the Gremlin-Server 
 
 - project: the root dir, it may contain multi concrete dirs
 
@@ -20,7 +130,7 @@ you need a config.json in project working dir (root dir) like belows(windows for
 - includePath: the path of the header file, it may contain multi paths
   - it does not support relative path
 
-- highPrecision: set to False
+- highPrecision: set to False, waiting to be implemented
 
 ```json
 {
@@ -36,7 +146,7 @@ you need a config.json in project working dir (root dir) like belows(windows for
 }
 ```
         
-### Some tech details
+## Some tech details
 
 ##### Something about Eclipse CDT
 
@@ -60,6 +170,6 @@ Different with the IDE Eclipse CDT, this is a jar we use to parse C
     - By the way, Joern has many repos, it is hard to read.
 - `GCC`, some ideas come from `gcc -E` to check the result after preprocess
 
-### Run steps
+## Run steps
 
-After the part of `Before move on`, just run Main is ok.
+After the part of `Before move on`, just run `Main` is ok.
