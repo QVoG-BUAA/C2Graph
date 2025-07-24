@@ -1,6 +1,6 @@
 # C2Graph
 
-C2Graph is a tool that leverages Eclipse CDT to construct a Simplified-CPG from C/C++ source code. 
+C2Graph is a tool that leverages Eclipse CDT to construct a Simplified-CPG from C source code. 
 
 ## Project Structure
 
@@ -19,51 +19,51 @@ Contains the complete source code for the C2Graph Java project.
 This directory holds the primary Java source code for the C2Graph application.
 
 *   **`org.c2graph.config`**:
-    Manages configuration settings (e.g., loaded from `config.json`) and initializes the Eclipse CDT parser for C/C++ files.
+    Manages configuration settings (e.g., loaded from `config.json`) and initializes the Eclipse CDT parser for C files.
 
 *   **`org.c2graph.model`**:
     Defines the core data structures for the C2Graph property graph, including nodes and edges.
-  *   **`bindings/`**:
+    *   **`bindings/`**:
       Provides mechanisms for attaching metadata to graph nodes and edges.
-  *   **`concurrent/`**:
-      Handles multi-threaded operations, particularly for concurrent graph data uploads to a database.
-  *   **`edge/`**:
-      Contains definitions for various types of graph edges.
-    *   `CASTEdge`: The base class for all C2Graph edges, representing relationships between elements in the Abstract Syntax Tree (AST).
-  *   **`stmt/`**:
-      Represents different types of C/C++ statements within the graph, designed to abstract and extract information from corresponding AST nodes.
-    *   `Statement`: The abstract base class for all statement representations in the graph.
-  *   `C2Graph`: The primary class responsible for parsing C/C++ files and constructing the C2Graph property graph.
-  *   `CASTNode`: Represents a node in the C2Graph, typically corresponding to an element in the C/C++ Abstract Syntax Tree (AST).
-  *   `JsonNode`, `JsonArrayNode`: Utility classes for constructing JSON objects and arrays, used for graph serialization or database uploads.
+    *   **`concurrent/`**:
+        Handles multi-threaded operations, particularly for concurrent graph data uploads to a database.
+    *   **`edge/`**:
+        Contains definitions for various types of graph edges.
+          *   `CASTEdge`: The base class for all C2Graph edges, representing relationships between the node elements.
+    *   **`stmt/`**:
+        Represents different types of C statements within the graph, designed to abstract and extract information from corresponding AST nodes.
+          *   `Statement`: The abstract base class for all statement representations in the graph.
+    *   `C2Graph`: The primary class responsible for parsing C files and constructing the C2Graph property graph.
+    *   `CASTNode`: Represents a node in the C2Graph, typically corresponding to an element in the C Abstract Syntax Tree (AST), the statement level.
+    *   `JsonNode`, `JsonArrayNode`: Utility classes for constructing JSON objects and arrays, used for graph serialization or database uploads.
 
 *   **`org.c2graph.util`**:
-    Provides a collection of utility methods to assist in C/C++ file parsing, graph construction, and data management.
-  *   **`debug/`**:
-      Aids in debugging by providing functionalities related to C/C++ AST parsing and visualization.
-  *   **`env/`**:
-      Manages environment contexts for Control Flow Graph (CFG) construction.
-    *   `Env`: Abstract base class for CFG environments.
-    *   `IfEnv`: Models the CFG environment for `if` statements, aiding control flow determination.
-    *   `WhileEnv`: Models the CFG environment for loop-like statements (e.g., `while`), assisting control flow determination.
-  *   **`exceptions/`**:
-      Contains custom exception classes specific to C2Graph operations.
-  *   `ConcurrentUtil`: Facilitates concurrent operations, including data verification during multi-threaded graph uploads.
-  *   `ExprUtil`: Assists in processing C/C++ expressions and extracting relevant expression information.
-  *   `FunctionCallUtil`: Provides utilities for extracting detailed information about function calls.
-  *   `GremlinUtil`: Facilitates graph interaction, particularly for uploading graph data to a database using the Gremlin traversal language.
-  *   `JsonUtil`: Provides utility methods for constructing JSON representations of graph elements, especially statements.
-  *   `MacroUtil`: Manages the handling and expansion of C/C++ preprocessor macros.
-  *   `NodeUtil`: Assists in managing graph nodes, including their creation and upload processes.
-  *   `ParserUtil`: Provides helper methods for parsing C/C++ source files using Eclipse CDT.
-  *   `StatementUtil`: Offers utilities for processing and managing statement-related data within the graph.
+    Provides a collection of utility methods to assist in C file parsing, graph construction, and data management.
+      *   **`debug/`**:
+          Aids in debugging by providing functionalities related to C AST parsing and visualization.
+      *   **`env/`**:
+          Manages environment contexts for Control Flow Graph (CFG) construction.
+            *   `Env`: Abstract base class for CFG environments.
+            *   `IfEnv`: Models the CFG environment for `if` statements, aiding control flow determination.
+            *   `WhileEnv`: Models the CFG environment for loop-like statements (e.g., `while`), assisting control flow determination.
+      *   **`exceptions/`**:
+          Contains custom exception classes specific to C2Graph operations.
+      *   `ConcurrentUtil`: Facilitates concurrent operations, including data verification during multi-threaded graph uploads.
+      *   `ExprUtil`: Assists in processing C expressions and extracting relevant expression information.
+      *   `FunctionCallUtil`: Provides utilities for extracting detailed information about function calls.
+      *   `GremlinUtil`: Facilitates graph interaction, particularly for uploading graph data to a database using the Gremlin traversal language.
+      *   `JsonUtil`: Provides utility methods for constructing JSON representations of graph elements, especially statements.
+      *   `MacroUtil`: Manages the handling and expansion of C preprocessor macros.
+      *   `NodeUtil`: Assists in managing graph nodes, including their creation and upload processes.
+      *   `ParserUtil`: Provides helper methods for parsing C source files using Eclipse CDT.
+      *   `StatementUtil`: Offers utilities for processing and managing statement-related data within the graph.
 
 *   `Main`:
-    The primary entry point for the C2Graph application, orchestrating the parsing of C/C++ files and the subsequent graph construction.
+    The primary entry point for the C2Graph application, orchestrating the parsing of C files and the subsequent graph construction.
 
 #### `src/main/resources/`
 
-Contains supplementary resources for C2Graph, including official C/C++ header files, test samples, and utility scripts (e.g., for data cleanup)
+Contains supplementary resources for C2Graph, including official C header files, test samples, and utility scripts (e.g., for data cleanup)
 
 ## Requirements
 
@@ -163,10 +163,10 @@ Different with the IDE Eclipse CDT, this is a jar we use to parse C
 - [ShiftLeftSecurity CPG build](https://github.com/ShiftLeftSecurity/codepropertygraph)
      
 - [Fraunhofer-AISEC CPG build](https://github.com/Fraunhofer-AISEC/cpg)
-    - they use CDT to parse C/C++ also, the code style is better than Joern, some ideas comes from here also.
+    - they use CDT to parse C also, the code style is better than Joern, some ideas comes from here also.
 
 - [Joern CPG build](https://github.com/joernio/joern)
-    - Joern is made by the team that come up with the CPG, they use CDT to parse C/C++ also.
+    - Joern is made by the team that come up with the CPG, they use CDT to parse C also.
     - By the way, Joern has many repos, it is hard to read.
 - `GCC`, some ideas come from `gcc -E` to check the result after preprocess
 
