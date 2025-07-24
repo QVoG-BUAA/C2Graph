@@ -1,6 +1,6 @@
 # C2Graph
 
-C2Graph is a tool that leverages Eclipse CDT to construct a comprehensive property graph from C/C++ source code. This graph represents the code's structure, control flow, and data dependencies, enabling advanced code analysis.
+C2Graph is a tool that leverages Eclipse CDT to construct a Simplified-CPG from C/C++ source code. 
 
 ## Project Structure
 
@@ -173,3 +173,5 @@ Different with the IDE Eclipse CDT, this is a jar we use to parse C
 ## Run steps
 
 After the part of `Before move on`, just run `Main` is ok.
+
+- the console will show if it has running successfully
